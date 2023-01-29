@@ -9,13 +9,22 @@ const gameBoard = (function () {
         boardArray.push("-");
     }
 
-    const addPiece = piece => {
-        boardArray.push(piece);
+    const addPiece = (piece, position) => {
+        boardArray.splice(position, 1, piece);
         console.log(boardArray);
         
     };
+
+    const legalMove = arrayPosition => {
+        if (boardArray[arrayPosition] != "-") {
+            return false;    
+        }
+        else {
+            return true;
+        }
+    };
         
-    return {addPiece, boardArray};
+    return {addPiece, boardArray, legalMove};
 
 });
 
@@ -27,40 +36,10 @@ const Player = (name, moniker) => {
 
 };
 
-// var Game = () => {
-//     let b = gameBoard
-//     let playerOne = Player("Player 1", "x");
-//     let playerTwo = Player("Player 2", "o");
-//     let currentPlayer = null;
-
-//     const newGame = () => {
-//         currentPlayer = playerOne;
-//     };
-
-//     const switchPlayer = () => {
-//         if (currentPlayer == playerOne) {
-//             console.log("player 1 if");            
-//             this.currentPlayer = playerTwo;
-            
-//         }
-//         else {
-//             console.log("player 1 else");
-//             currentPlayer = playerOne;
-//         }
-//     };
-    
-
-//     const hello = () => {
-//         console.log("hello world");
-//     }
-
-//     return {hello, switchPlayer, currentPlayer, newGame};
-    
-// };
 
 const newGame = () => {
     const b = gameBoard();
-    console.log(b);
+    
 
     let blocks = document.querySelectorAll(".move");
     blocks.forEach(block => block.addEventListener("click", (event) => {
@@ -73,33 +52,24 @@ const newGame = () => {
     let currentPlayer = playerOne;
 
     const switchPlayer = () => {
-        console.log("before conditional: " + currentPlayer.getMoniker)
-        if (currentPlayer === playerOne) {
-            b.addPiece(currentPlayer.getMoniker);
-            console.log("if");
-            console.log("this " + this)
+        
+        if (currentPlayer === playerOne) {            
             currentPlayer = playerTwo;
         }
-        else {
-            console.log("else");
-            b.addPiece(currentPlayer.getMoniker);
+        else {           
             currentPlayer = playerOne;
         }
-    };
-
-    const player = () => {
-        console.log("current player after switch " + currentPlayer.getMoniker);
-    };
+    };  
 
     const possibleMove = target => {
-        let move = target.id.split("-")[1];
+        let arrayPosition = target.id.split("-")[1];
 
-        if (b.boardArray[move] != "-") {
-            return
+        if (b.legalMove(arrayPosition)) {
+            b.addPiece(currentPlayer.getMoniker, arrayPosition);
+            switchPlayer();
         }
-        else {
-            b.boardArray.splice(move, 1, currentPlayer.getMoniker);
-            console.log(b.boardArray);
+        else {            
+            return
         }
 
     };
@@ -107,36 +77,10 @@ const newGame = () => {
 
     
 
-    return {currentPlayer, switchPlayer, player, possibleMove};
+    return {currentPlayer, switchPlayer, possibleMove};
 };
 
 let game = newGame();
-
-
-
-// let blocks = document.querySelectorAll(".move");
-// blocks.forEach(block => block.addEventListener("click", logButton(block)));
-
-
-// game.switchPlayer();
-// game.player();
-// game.switchPlayer();
-// game.player();
-
-// let b = gameBoard;
-// b.addPiece("x");
-
-// let blocks = document.querySelectorAll(".move");
-// blocks.forEach(block => block.addEventListener("click", (event) => {
-//     game.possibleMove(event.target);
-// }));
-
-// function logButton(block) {
-//    console.log(block.id)
-// };
-
-
-
 
 
 
