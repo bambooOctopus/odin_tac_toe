@@ -60,14 +60,30 @@ const gameController = () => {
         gameBoard.newBoard();
     };
 
-    //player turn would run on click?
+    const switchPlayers = () => {
+        if (currentPlayer === playerOne) {
+            currentPlayer = playerTwo;
+        }
+        else {
+            currentPlayer = playerOne;
+        };
+    };
+
+    //player turn would run on click
     const playerTurn = (eventTarget) => {
         console.log(eventTarget.id.split("-")[1])
-        //take click input; verify it's a legal move
+        //take click input; verify it's a legal move; update board if so
         let moveId = eventTarget.id.split("-")[1];
         if (gameBoard.legalMove(moveId)) {            
             gameBoard.addPiece(moveId, currentPlayer.getMoniker());
-            console.log(gameBoard.boardArray);
+
+            //then switch players
+            switchPlayers();
+            console.log("current player after switch " + currentPlayer.getMoniker())
+            console.log(gameBoard.boardArray)
+
+            
+
         }
         else {
             return;
