@@ -4,16 +4,17 @@ var gameBoard = (function () {
 
     //making the initial board all hypens will make it easier to check if the position is
     //taken or not.
-    for (i=0; i < 9; i++) {
-        boardArray.push("-");
-    }
+    // for (i=0; i < 9; i++) {
+    //     boardArray.push("-");
+    // }
+
+    const addPiece = piece => {
+        boardArray.push(piece);
+        console.log(boardArray);
         
-    return {
+    };
         
-        board: function() {
-            console.log(boardArray);
-        }
-    }
+    return {addPiece};
 
 })();
 
@@ -25,37 +26,39 @@ var Player = (name, moniker) => {
 
 };
 
-var Game = () => {
-    let playerOne = Player("Player 1", "x");
-    let playerTwo = Player("Player 2", "o");
-    let currentPlayer = null;
+// var Game = () => {
+//     let b = gameBoard
+//     let playerOne = Player("Player 1", "x");
+//     let playerTwo = Player("Player 2", "o");
+//     let currentPlayer = null;
 
-    const newGame = () => {
-        currentPlayer = playerOne;
-    };
+//     const newGame = () => {
+//         currentPlayer = playerOne;
+//     };
 
-    const switchPlayer = () => {
-        if (currentPlayer == playerOne) {
-            console.log("player 1 if");            
-            this.currentPlayer = playerTwo;
+//     const switchPlayer = () => {
+//         if (currentPlayer == playerOne) {
+//             console.log("player 1 if");            
+//             this.currentPlayer = playerTwo;
             
-        }
-        else {
-            console.log("player 1 else");
-            currentPlayer = playerOne;
-        }
-    };
+//         }
+//         else {
+//             console.log("player 1 else");
+//             currentPlayer = playerOne;
+//         }
+//     };
     
 
-    const hello = () => {
-        console.log("hello world");
-    }
+//     const hello = () => {
+//         console.log("hello world");
+//     }
 
-    return {hello, switchPlayer, currentPlayer, newGame};
+//     return {hello, switchPlayer, currentPlayer, newGame};
     
-};
+// };
 
 var newGame = () => {
+    let b = gameBoard;
     const playerOne = Player("Player 1", "x");
     const playerTwo = Player("Player 2", "o");
     let currentPlayer = playerOne;
@@ -63,12 +66,14 @@ var newGame = () => {
     const switchPlayer = () => {
         console.log("before conditional: " + currentPlayer.getMoniker)
         if (currentPlayer === playerOne) {
+            b.addPiece(currentPlayer.getMoniker);
             console.log("if");
             console.log("this " + this)
             currentPlayer = playerTwo;
         }
         else {
             console.log("else");
+            b.addPiece(currentPlayer.getMoniker);
             currentPlayer = playerOne;
         }
     };
@@ -88,6 +93,7 @@ game.player();
 game.switchPlayer();
 game.player();
 
-
+// let b = gameBoard;
+// b.addPiece("x");
 
 
