@@ -1,3 +1,4 @@
+//board module
 var gameBoard = (function () {
     boardArray = [];
 
@@ -15,6 +16,15 @@ var gameBoard = (function () {
     }
 
 })();
+
+var Player = (name, moniker) => {
+    const getName = name;
+    const getMoniker = moniker;
+
+    return {getName, getMoniker};
+
+};
+
 
 gameBoard.board();
 
