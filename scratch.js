@@ -37,8 +37,35 @@ const Board = () => {
         }
     };
 
-    return {boardArray, newBoard, legalMove, addPiece}
+    const isGameOver = () => {        
+        return false
+
+    };
+
+    return {boardArray, newBoard, legalMove, addPiece, isGameOver}
 };
+
+//this is a module not a factory
+var updateDom = (function () {
+    return {
+        updateGrid: function(positionId, playerMoniker) {
+            let gridDiv = document.getElementById(positionId);
+            gridDiv.textContent = playerMoniker;         
+        }
+    }
+})();
+
+
+
+// const updateDom = () => {
+//     const updateGrid = (positionId, playerMoniker) => {
+//         let gridDiv = document.getElementById(positionId);
+//         gridDiv.textContent = playerMoniker;
+//     };
+
+//     return {updateGrid}
+
+// }
 
 const gameController = () => {
     const playerOne = Player("Player One", "x");
@@ -71,41 +98,30 @@ const gameController = () => {
 
     //player turn would run on click
     const playerTurn = (eventTarget) => {
-        console.log(eventTarget.id.split("-")[1])
+        
         //take click input; verify it's a legal move; update board if so
         let moveId = eventTarget.id.split("-")[1];
         if (gameBoard.legalMove(moveId)) {            
             gameBoard.addPiece(moveId, currentPlayer.getMoniker());
+            updateDom.updateGrid(eventTarget.id, currentPlayer.getMoniker());
 
-            //then switch players
-            switchPlayers();
-            console.log("current player after switch " + currentPlayer.getMoniker())
-            console.log(gameBoard.boardArray)
-
-            
+            //check for game over
+            if (gameBoard.isGameOver()) {
+                console.log("isgameover")
+                //end game is reset board
+                gameBoard.newBoard();
+                currentPlayer = playerOne;
+                console.log(gameBoard.boardArray);
+            }
+            else {
+                console.log("isntgameover")                
+                switchPlayers();
+            };           
 
         }
         else {
             return;
-        };
-
-        
-
-        //if (currentPlayer === playerOne) {
-            //check to see if it's a legal move
-
-            //and if it is make the move (add it to the boardArray; eventually update dom)
-
-            //then check to see if it is game over
-
-            //if it isn't game over switch players 
-
-            //if it is game over end the game
-        //}
-        //else {
-
-        //};
-
+        };        
     };
 
     
