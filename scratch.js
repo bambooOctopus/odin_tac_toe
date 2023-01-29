@@ -55,18 +55,6 @@ var updateDom = (function () {
     }
 })();
 
-
-
-// const updateDom = () => {
-//     const updateGrid = (positionId, playerMoniker) => {
-//         let gridDiv = document.getElementById(positionId);
-//         gridDiv.textContent = playerMoniker;
-//     };
-
-//     return {updateGrid}
-
-// }
-
 const gameController = () => {
     const playerOne = Player("Player One", "x");
     const playerTwo = Player("Player Two", "o");
