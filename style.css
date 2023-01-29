@@ -29,6 +29,11 @@ body {
     height: 90%;
     border: solid 1px lightgray;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+
     transition: 0.2s ease-in;
 }
 
