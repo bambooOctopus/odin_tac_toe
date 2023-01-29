@@ -37,8 +37,34 @@ const Board = () => {
         }
     };
 
-    const isGameOver = () => {        
-        return false
+    const isGameOver = () => { 
+        const playerOneMoniker = "x"
+        const playerTwoMoniker = "o"
+        const allEqual = arr => arr.every( v => v === playerOneMoniker || v === playerTwoMoniker);
+
+        let row1 = [boardArray[0], boardArray[1], boardArray[2]];
+        let row2 = [boardArray[3], boardArray[4], boardArray[5]];
+        let row3 = [boardArray[6], boardArray[7], boardArray[8]];
+        
+        let column1 = [boardArray[0], boardArray[3], boardArray[6]];
+        let column2 = [boardArray[1], boardArray[4], boardArray[7]];
+        let column3 = [boardArray[2], boardArray[5], boardArray[8]];
+        
+        let diag1 = [boardArray[0], boardArray[4], boardArray[8]];
+        let diag2 = [boardArray[2], boardArray[4], boardArray[6]];       
+
+        if (allEqual(row1) || allEqual(row2) || allEqual(row3)) {
+            return true;
+        }
+        else if (allEqual(column1) || allEqual(column2) || allEqual(column3)) {
+            return true;
+        }
+        else if (allEqual(diag1) || allEqual(diag2)) {
+            return true;
+        }
+        else {
+            return false;
+        };       
 
     };
 
@@ -51,6 +77,11 @@ var updateDom = (function () {
         updateGrid: function(positionId, playerMoniker) {
             let gridDiv = document.getElementById(positionId);
             gridDiv.textContent = playerMoniker;         
+        },
+
+        clearScreen: function() {
+            let gridDiv = document.querySelectorAll(".move");
+            gridDiv.forEach(div => div.textContent = "");
         }
     }
 })();
@@ -97,9 +128,12 @@ const gameController = () => {
             if (gameBoard.isGameOver()) {
                 console.log("isgameover")
                 //end game is reset board
-                gameBoard.newBoard();
+                gameBoard.newBoard(); 
+                updateDom.clearScreen();               
                 currentPlayer = playerOne;
                 console.log(gameBoard.boardArray);
+                
+
             }
             else {
                 console.log("isntgameover")                
