@@ -1,12 +1,13 @@
 //board module
-var gameBoard = (function () {
-    boardArray = [];
+const gameBoard = (function () {
+    let boardArray = [];
+    
 
-    //making the initial board all hypens will make it easier to check if the position is
-    //taken or not.
-    // for (i=0; i < 9; i++) {
-    //     boardArray.push("-");
-    // }
+    // making the initial board all hypens will make it easier to check if the position is
+    // taken or not.
+    for (i=0; i < 9; i++) {
+        boardArray.push("-");
+    }
 
     const addPiece = piece => {
         boardArray.push(piece);
@@ -14,11 +15,11 @@ var gameBoard = (function () {
         
     };
         
-    return {addPiece};
+    return {addPiece, boardArray};
 
-})();
+});
 
-var Player = (name, moniker) => {
+const Player = (name, moniker) => {
     const getName = name;
     const getMoniker = moniker;
 
@@ -58,7 +59,15 @@ var Player = (name, moniker) => {
 // };
 
 const newGame = () => {
-    let b = gameBoard;
+    const b = gameBoard();
+    console.log(b);
+
+    let blocks = document.querySelectorAll(".move");
+    blocks.forEach(block => block.addEventListener("click", (event) => {
+        game.possibleMove(event.target);
+    }));
+    
+
     const playerOne = Player("Player 1", "x");
     const playerTwo = Player("Player 2", "o");
     let currentPlayer = playerOne;
@@ -79,15 +88,36 @@ const newGame = () => {
     };
 
     const player = () => {
-        console.log("current player after switch " + currentPlayer.getMoniker)
+        console.log("current player after switch " + currentPlayer.getMoniker);
     };
+
+    const possibleMove = target => {
+        let move = target.id.split("-")[1];
+
+        if (b.boardArray[move] != "-") {
+            return
+        }
+        else {
+            b.boardArray.splice(move, 1, currentPlayer.getMoniker);
+            console.log(b.boardArray);
+        }
+
+    };
+    
 
     
 
-    return {currentPlayer, switchPlayer, player};
+    return {currentPlayer, switchPlayer, player, possibleMove};
 };
 
-// let game = newGame();
+let game = newGame();
+
+
+
+// let blocks = document.querySelectorAll(".move");
+// blocks.forEach(block => block.addEventListener("click", logButton(block)));
+
+
 // game.switchPlayer();
 // game.player();
 // game.switchPlayer();
@@ -96,12 +126,17 @@ const newGame = () => {
 // let b = gameBoard;
 // b.addPiece("x");
 
-let blocks = document.querySelectorAll(".move");
-blocks.forEach(block => block.addEventListener("click", logButton));
+// let blocks = document.querySelectorAll(".move");
+// blocks.forEach(block => block.addEventListener("click", (event) => {
+//     game.possibleMove(event.target);
+// }));
 
-function logButton() {
-    console.log(this.id);
-}
+// function logButton(block) {
+//    console.log(block.id)
+// };
+
+
+
 
 
 
