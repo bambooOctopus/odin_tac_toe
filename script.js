@@ -87,13 +87,21 @@ const newGame = () => {
     return {currentPlayer, switchPlayer, player};
 };
 
-let game = newGame();
-game.switchPlayer();
-game.player();
-game.switchPlayer();
-game.player();
+// let game = newGame();
+// game.switchPlayer();
+// game.player();
+// game.switchPlayer();
+// game.player();
 
 // let b = gameBoard;
 // b.addPiece("x");
+
+let blocks = document.querySelectorAll(".move");
+blocks.forEach(block => block.addEventListener("click", logButton));
+
+function logButton() {
+    console.log(this.id);
+}
+
 
 
