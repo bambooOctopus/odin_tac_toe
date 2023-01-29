@@ -57,7 +57,7 @@ var Player = (name, moniker) => {
     
 // };
 
-var newGame = () => {
+const newGame = () => {
     let b = gameBoard;
     const playerOne = Player("Player 1", "x");
     const playerTwo = Player("Player 2", "o");
