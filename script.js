@@ -1,166 +1,182 @@
-//board module
-const gameBoard = (function () {
+//new script.js
+
+
+const Player = (name, moniker) => {    
+    const getName = () => {
+        return name;
+    };    
+
+    const getMoniker = () => {
+        return moniker;
+    };
+
+    return {getName, getMoniker};
+};
+
+const Board = () => {
     let boardArray = [];
     
 
-    // making the initial board all hypens will make it easier to check if the position is
-    // taken or not.
-    for (i=0; i < 9; i++) {
-        boardArray.push("-");
-    }
-
-    const addPiece = (piece, position) => {
-        boardArray.splice(position, 1, piece);
-        console.log(boardArray);
-        
+    const newBoard = () => {
+        let boardArrayLength = boardArray.length
+        for (i=0; i < boardArrayLength; i++) {
+            boardArray.pop();
+        }
+        for (i=0; i < 9; i++) {
+            boardArray.push("-");
+        };
     };
 
-    const legalMove = arrayPosition => {
-        if (boardArray[arrayPosition] != "-") {
-            return false;    
-        }
-        else {
+    const legalMove = (position) => {
+        if (boardArray[position] === "-") {
             return true;
         }
+        else {
+            return false;
+        }
     };
 
-    
+    const addPiece = (position, playerMoniker) => {
+        if (boardArray[position] === "-") {
+            boardArray.splice(position, 1, playerMoniker);
+        }
+        else {
+            return "invalid move";
+        }
+    };
+
+    const isGameOver = () => { 
+        const playerOneMoniker = "x"
+        const playerTwoMoniker = "o"
+        const playerOneWin = arr => arr.every( v => v == playerOneMoniker);
+        const playerTwoWin = arr => arr.every( v => v == playerTwoMoniker);
+
+
+        let row1 = [boardArray[0], boardArray[1], boardArray[2]];
+        let row2 = [boardArray[3], boardArray[4], boardArray[5]];
+        let row3 = [boardArray[6], boardArray[7], boardArray[8]];
         
-    return {addPiece, boardArray, legalMove};
+        let column1 = [boardArray[0], boardArray[3], boardArray[6]];
+        let column2 = [boardArray[1], boardArray[4], boardArray[7]];
+        let column3 = [boardArray[2], boardArray[5], boardArray[8]];
+        
+        let diag1 = [boardArray[0], boardArray[4], boardArray[8]];
+        let diag2 = [boardArray[2], boardArray[4], boardArray[6]];       
 
-});
+        console.log("boardArray from isGameOver: " + boardArray)
 
-const updateDom = (positionId, playerMoniker) => {
-    let gridDiv = document.getElementById(positionId);
-    gridDiv.textContent = playerMoniker;
+        if (playerOneWin(row1) || playerOneWin(row2) || playerOneWin(row3)) {
+            return true;
+        }
+        else if (playerOneWin(column1) || playerOneWin(column2) || playerOneWin(column3)) {
+            return true;
+        }
+        else if (playerOneWin(diag1) || playerOneWin(diag2)) {
+            return true;
+        }
 
+        else if (playerTwoWin(row1) || playerTwoWin(row2) || playerTwoWin(row3)) {
+            return true;
+        }
+        else if (playerTwoWin(column1) || playerTwoWin(column2) || playerTwoWin(column3)) {
+            return true;
+        }
+        else if (playerTwoWin(diag1) || playerTwoWin(diag2)) {
+            return true;
+        }
+        else {
+            return false;
+        };       
+
+    };
+
+    return {boardArray, newBoard, legalMove, addPiece, isGameOver}
 };
 
-const clearDom = () => {
-    let gridDiv = document.querySelectorAll(".move");
-    gridDiv.forEach(div => div.textContent = "");
-};
+//this is a module not a factory
+var updateDom = (function () {
+    return {
+        updateGrid: function(positionId, playerMoniker) {
+            let gridDiv = document.getElementById(positionId);
+            gridDiv.textContent = playerMoniker;         
+        },
 
-const gameOver = (boardArray) => {
-    let playerOneMoniker = "x";
-    let playerTwoMoniker = "o";
-
-    const allEqual = arr => arr.every( v => v === playerOneMoniker || v === playerTwoMoniker);
-
-    let row1 = [boardArray[0], boardArray[1], boardArray[2]];
-    let row2 = [boardArray[3], boardArray[4], boardArray[5]];
-    let row3 = [boardArray[6], boardArray[7], boardArray[8]];
-    
-    let column1 = [boardArray[0], boardArray[3], boardArray[6]];
-    let column2 = [boardArray[1], boardArray[4], boardArray[7]];
-    let column3 = [boardArray[2], boardArray[5], boardArray[8]];
-    
-    let diag1 = [boardArray[0], boardArray[4], boardArray[8]];
-    let diag2 = [boardArray[2], boardArray[4], boardArray[6]];
-
-    if (allEqual(row1) || allEqual(row2) || allEqual(row3)) {
-        return true;
+        clearScreen: function() {
+            let gridDiv = document.querySelectorAll(".move");
+            gridDiv.forEach(div => div.textContent = "");
+        }
     }
-    else if (allEqual(column1) || allEqual(column2) || allEqual(column3)) {
-        return true;
-    }
-    else if (allEqual(diag1) || allEqual(diag2)) {
-        return true;
-    }
+})();
 
-};
-
-const Player = (name, moniker) => {
-    const getName = name;
-    const getMoniker = moniker;
-
-    return {getName, getMoniker};
-
-};
-
-
-const newGame = () => {
-    const b = gameBoard();
-    
-    
+const gameController = () => {
+    const playerOne = Player("Player One", "x");
+    const playerTwo = Player("Player Two", "o");
+    let currentPlayer = playerOne;
+    const gameBoard = Board();
 
     let blocks = document.querySelectorAll(".move");
     blocks.forEach(block => block.addEventListener("click", (event) => {
-        game.possibleMove(event.target);
+        console.log(currentPlayer.getMoniker())
+            playerTurn(event.target);
+
     }));
 
-    
-    
 
-    const playerOne = Player("Player 1", "x");
-    const playerTwo = Player("Player 2", "o");
-    let currentPlayer = playerOne;
-    let stopGame = false;
 
-    if (stopGame === true) {
-        console.log(`the winner is ${currentPlayer.getName}`);
-        return;        
-    }
+    const newGame = () => {
+        //set new gameBoard
+        gameBoard.newBoard();
+    };
 
-    const switchPlayer = () => {
-        
-        if (currentPlayer === playerOne) {            
+    const switchPlayers = () => {
+        if (currentPlayer === playerOne) {
             currentPlayer = playerTwo;
         }
-        else {           
+        else {
             currentPlayer = playerOne;
-        }
-    };  
+        };
+    };
 
-    const possibleMove = target => {
-        let arrayPosition = target.id.split("-")[1];
+    //player turn would run on click
+    const playerTurn = (eventTarget) => {
+        
+        //take click input; verify it's a legal move; update board if so
+        let moveId = eventTarget.id.split("-")[1];
+        if (gameBoard.legalMove(moveId)) {            
+            gameBoard.addPiece(moveId, currentPlayer.getMoniker());
+            updateDom.updateGrid(eventTarget.id, currentPlayer.getMoniker());
+            console.log(gameBoard.boardArray)
 
-        if (b.legalMove(arrayPosition)) {
-            b.addPiece(currentPlayer.getMoniker, arrayPosition);
-            updateDom(target.id, currentPlayer.getMoniker);  
-            
-            if (gameOver(b.boardArray) === true) {
-                alert(`the game is over. the winner is ${currentPlayer.getName}`); 
-                if (confirm("would you like to play again?")) {
-                    b.boardArray = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
-                    console.log("this board array here ");
-                     console.log(b.boardArray);
-                    clearDom();
-                    currentPlayer = playerOne;
-                    stopGame = false;
-                };               
+            //check for game over
+            if (gameBoard.isGameOver()) {
+                console.log("isgameover")
+                //end game is reset board
+                alert(`Game Over. ${currentPlayer.getName()} is victorious!`);
+                
+                gameBoard.newBoard(); 
+                updateDom.clearScreen();
+                currentPlayer = playerOne;
+                
+                return                     
+                
+
             }
             else {
-                switchPlayer();
-            }
-            
-        }
-        else {            
-            return
-        }
+                console.log("isntgameover")                
+                switchPlayers();
+            };           
 
-        
-
+        }
+        else {
+            return;
+        };        
     };
-
-    const changeStopGame = () => {
-        if (stopGame === false) {
-            console.log(stopGame);
-            stopGame = true;
-            console.log(stopGame);
-        }
-    };
-    
 
     
 
-    return {currentPlayer, switchPlayer, possibleMove};
+    return {playerOne, playerTwo, gameBoard, newGame};
 };
 
-let game = newGame();
-
-
-
-
-
+let g = gameController();
+g.newGame();
 
