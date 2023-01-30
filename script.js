@@ -121,18 +121,26 @@ const gameController = () => {
 
     }));  
 
+    let resetBtn = document.getElementById("reset");
+    resetBtn.addEventListener("click", (event) => {
+        newGame();
+    });
 
     const newGame = () => {
         //set new gameBoard
-        gameBoard.newBoard();
+        gameBoard.newBoard(); 
+        updateDom.clearScreen();
+        currentPlayer = playerOne;
     };
 
     const switchPlayers = () => {
+        const body = document.getElementById("body");
+        console.log(body);
         if (currentPlayer === playerOne) {
-            currentPlayer = playerTwo;
+            currentPlayer = playerTwo;            
         }
         else {
-            currentPlayer = playerOne;
+            currentPlayer = playerOne;            
         };
     };
 
@@ -152,12 +160,7 @@ const gameController = () => {
                 //end game is reset board
                 alert(`Game Over. ${currentPlayer.getName()} is victorious!`);
                 
-                gameBoard.newBoard(); 
-                updateDom.clearScreen();
-                currentPlayer = playerOne;
-
-                
-                
+                newGame()              
                 
                 return                     
                 

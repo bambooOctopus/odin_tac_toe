@@ -7,6 +7,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background-image: linear-gradient(to right, lightblue , lightgray, white);
+
+    
 }
 
 .board {
@@ -27,16 +31,35 @@ body {
 .move {
     width: 90%;
     height: 90%;
-    border: solid 1px lightgray;
+    border: solid 1px gray;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 60px;
+    font-size: 11rem;
 
     transition: 0.2s ease-in;
 }
 
 .move:hover {
     transform: scale(1.06);
+    cursor: pointer;
+}
+
+.reset-btn {
+    padding: .3rem .5rem;
+    font-size: 14px;
+    margin-right: 2rem;
+    background-color: lightblue;
+    /* border: solid 1px gray; */
+    border: none;
+    color: slategray;
+
+    transition: 0.2s ease-in;
+    
+}
+
+.reset-btn:hover {
+    transform: scale(1.1);
+    cursor: pointer;
 }
