@@ -131,16 +131,25 @@ const gameController = () => {
         gameBoard.newBoard(); 
         updateDom.clearScreen();
         currentPlayer = playerOne;
+        const playerOneDiv = document.querySelectorAll(".player")[0];
+        const playerTwoDiv = document.querySelectorAll(".player")[1];
+        playerOneDiv.classList = "player current-player";
+        playerTwoDiv.classList = "player";
     };
 
     const switchPlayers = () => {
-        const body = document.getElementById("body");
-        console.log(body);
+        const playerDiv = document.querySelectorAll(".player");
+        const playerOneDiv = playerDiv[0];
+        const playerTwoDiv = playerDiv[1];        
         if (currentPlayer === playerOne) {
-            currentPlayer = playerTwo;            
+            currentPlayer = playerTwo; 
+            playerOneDiv.classList = "player";
+            playerTwoDiv.classList = "player current-player";           
         }
         else {
             currentPlayer = playerOne;            
+            playerOneDiv.classList = "player current-player";            
+            playerTwoDiv.classList = "player";
         };
     };
 
