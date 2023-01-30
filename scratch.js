@@ -12,8 +12,13 @@ const Player = (name, moniker) => {
 
 const Board = () => {
     let boardArray = [];
+    
 
     const newBoard = () => {
+        let boardArrayLength = boardArray.length
+        for (i=0; i < boardArrayLength; i++) {
+            boardArray.pop();
+        }
         for (i=0; i < 9; i++) {
             boardArray.push("-");
         };
@@ -40,7 +45,9 @@ const Board = () => {
     const isGameOver = () => { 
         const playerOneMoniker = "x"
         const playerTwoMoniker = "o"
-        const allEqual = arr => arr.every( v => v === playerOneMoniker || v === playerTwoMoniker);
+        const playerOneWin = arr => arr.every( v => v == playerOneMoniker);
+        const playerTwoWin = arr => arr.every( v => v == playerTwoMoniker);
+
 
         let row1 = [boardArray[0], boardArray[1], boardArray[2]];
         let row2 = [boardArray[3], boardArray[4], boardArray[5]];
@@ -53,13 +60,25 @@ const Board = () => {
         let diag1 = [boardArray[0], boardArray[4], boardArray[8]];
         let diag2 = [boardArray[2], boardArray[4], boardArray[6]];       
 
-        if (allEqual(row1) || allEqual(row2) || allEqual(row3)) {
+        console.log("boardArray from isGameOver: " + boardArray)
+
+        if (playerOneWin(row1) || playerOneWin(row2) || playerOneWin(row3)) {
             return true;
         }
-        else if (allEqual(column1) || allEqual(column2) || allEqual(column3)) {
+        else if (playerOneWin(column1) || playerOneWin(column2) || playerOneWin(column3)) {
             return true;
         }
-        else if (allEqual(diag1) || allEqual(diag2)) {
+        else if (playerOneWin(diag1) || playerOneWin(diag2)) {
+            return true;
+        }
+
+        else if (playerTwoWin(row1) || playerTwoWin(row2) || playerTwoWin(row3)) {
+            return true;
+        }
+        else if (playerTwoWin(column1) || playerTwoWin(column2) || playerTwoWin(column3)) {
+            return true;
+        }
+        else if (playerTwoWin(diag1) || playerTwoWin(diag2)) {
             return true;
         }
         else {
@@ -123,15 +142,19 @@ const gameController = () => {
         if (gameBoard.legalMove(moveId)) {            
             gameBoard.addPiece(moveId, currentPlayer.getMoniker());
             updateDom.updateGrid(eventTarget.id, currentPlayer.getMoniker());
+            console.log(gameBoard.boardArray)
 
             //check for game over
             if (gameBoard.isGameOver()) {
                 console.log("isgameover")
                 //end game is reset board
+                alert(`Game Over. ${currentPlayer.getName()} is victorious!`);
+                
                 gameBoard.newBoard(); 
-                updateDom.clearScreen();               
+                updateDom.clearScreen();
                 currentPlayer = playerOne;
-                console.log(gameBoard.boardArray);
+                
+                return                     
                 
 
             }
