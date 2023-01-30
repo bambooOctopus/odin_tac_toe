@@ -119,8 +119,7 @@ const gameController = () => {
         console.log(currentPlayer.getMoniker())
             playerTurn(event.target);
 
-    }));
-
+    }));  
 
 
     const newGame = () => {
@@ -149,13 +148,16 @@ const gameController = () => {
 
             //check for game over
             if (gameBoard.isGameOver()) {
-                console.log("isgameover")
+                console.log("isgameover")                
                 //end game is reset board
                 alert(`Game Over. ${currentPlayer.getName()} is victorious!`);
                 
                 gameBoard.newBoard(); 
                 updateDom.clearScreen();
                 currentPlayer = playerOne;
+
+                
+                
                 
                 return                     
                 
