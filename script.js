@@ -143,13 +143,13 @@ const gameController = () => {
         const playerTwoDiv = playerDiv[1];        
         if (currentPlayer === playerOne) {
             currentPlayer = playerTwo; 
-            playerOneDiv.classList = "player";
-            playerTwoDiv.classList = "player current-player";           
+            playerOneDiv.classList.toggle("current-player");
+            playerTwoDiv.classList.toggle("current-player");
         }
         else {
             currentPlayer = playerOne;            
-            playerOneDiv.classList = "player current-player";            
-            playerTwoDiv.classList = "player";
+            playerOneDiv.classList.toggle("current-player");
+            playerTwoDiv.classList.toggle("current-player");
         };
     };
 
